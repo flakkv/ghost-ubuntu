@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Ghost Installation Script for Ubuntu based on https://ghost.org/docs/install/ubuntu/
 
 # Ensure the script is run as root
 if [ "$(id -u)" != "0" ]; then
@@ -10,6 +9,8 @@ fi
 
 # Update and upgrade system
 apt-get update && apt-get upgrade -y
+
+sudo apt-get install mysql-server
 
 # Add the required repository and install Node.js
 curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash
