@@ -2,9 +2,9 @@ provider "aws" {
   region = "eu-central-1"
 }
 
-resource "aws_security_group" "ghost_sg" {
-  name        = "GhostSecurityGroup"
-  description = "Security group for Ghost Server"
+resource "aws_security_group" "ghostubuntu_sg" {
+  name        = "GhostUbuntuSecurityGroup"
+  description = "Security group for Ghost Ubuntu Server"
 
   ingress {
     from_port   = 80
@@ -21,11 +21,11 @@ resource "aws_security_group" "ghost_sg" {
   }
 }
 
-resource "aws_instance" "ghost_server" {
+resource "aws_instance" "ghostubuntu" {
   ami           = "ami-06dd92ecc74fdfb36"  # Remember to replace this with the appropriate AMI for your region.
   instance_type = "t2.micro"
   key_name      = "e570"  # Replace with the name of your existing key.
-  vpc_security_group_ids = [aws_security_group.ghost_sg.id]
+  vpc_security_group_ids = [aws_security_group.ghostubuntu_sg.id]
 
   user_data = <<-EOT
               #!/bin/bash
@@ -51,10 +51,10 @@ resource "aws_instance" "ghost_server" {
   EOT
 
   tags = {
-    Name = "GhostServer"
+    Name = "GhostUbuntuServer"
   }
 }
 
-output "ghost_server_ip" {
-  value = aws_instance.ghost_server.public_ip
+output "ghostubuntu_ip" {
+  value = aws_instance.ghostubuntu.public_ip
 }
