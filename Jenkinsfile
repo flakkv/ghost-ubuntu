@@ -42,7 +42,7 @@ pipeline {
             steps {
                 script {
                     // Output the IP of the Ghost server
-                    def ghostIP = sh(script: 'terraform output ghost_server_ip', returnStdout: true).trim()
+                    def ghostIP = sh(script: 'terraform output ghostubuntu_ip', returnStdout: true).trim()
                     echo "Ghost server IP: ${ghostIP}"
                 }
             }
