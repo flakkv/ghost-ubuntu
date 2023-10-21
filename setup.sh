@@ -1,37 +1,50 @@
 #!/bin/bash
 
-# System Update
-sudo apt-get update
-sudo apt-get upgrade -y
+# Ghost Installation Script for Ubuntu based on https://ghost.org/docs/install/ubuntu/
 
-# Install Nginx
-sudo apt-get install nginx -y
+# Ensure the script is run as root
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
 
-# Start and enable Nginx
-sudo systemctl start nginx
-sudo systemctl enable nginx
+# Update and upgrade system
+apt-get update && apt-get upgrade -y
 
-# Install MySQL
-sudo apt-get install mysql-server -y
+# Add the required repository and install Node.js
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash
+apt-get install -y nodejs
 
-# Secure MySQL installation
-echo "You will be prompted to configure your MySQL installation"
-sudo mysql_secure_installation
+# Install npm (Though it typically comes bundled with Node.js from NodeSource)
+apt-get install -y npm
 
-# Install Node.js
-curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-sudo apt-get install -y nodejs
+# Install nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 
-# Install Ghost CLI
-sudo npm install ghost-cli@latest -g
+# Refresh the environment to recognize nvm
+source ~/.bashrc
 
-# Create directory for Ghost installation
-sudo mkdir -p /var/www/ghost
-sudo chown $USER:$USER /var/www/ghost
-sudo chmod 775 /var/www/ghost
-cd /var/www/ghost
+# Use nvm to install Node.js 16.14.0 and set it as default
+su - $SUDO_USER -c "nvm install 16.14.0 && nvm use 16.14.0 && nvm alias default 16.14.0"
 
-# Install Ghost
-ghost install
+# Adjust permissions for /home/ubuntu/
+chmod o+rx /home/ubuntu/
 
-echo "Ghost installation completed."
+# Install NGINX
+apt-get install nginx -y
+systemctl start nginx
+systemctl enable nginx
+
+# Install Ghost-CLI
+npm install ghost-cli@latest -g
+
+# Set up directory for Ghost installation
+mkdir -p /var/www/ghost
+chown $SUDO_USER:$SUDO_USER /var/www/ghost
+chmod 775 /var/www/ghost
+
+# Move to directory and install Ghost
+su - $SUDO_USER -c "cd /var/www/ghost && ghost install"
+
+
+echo "Ghost installation completed!"
