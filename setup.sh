@@ -25,7 +25,7 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 source ~/.bashrc
 
 # Use nvm to install Node.js 16.14.0 and set it as default
-su - $SUDO_USER -c "nvm install 16.14.0 && nvm use 16.14.0 && nvm alias default 16.14.0"
+nvm install 16.14.0 && nvm use 16.14.0 && nvm alias default 16.14.0
 
 # Adjust permissions for /home/ubuntu/
 chmod o+rx /home/ubuntu/
@@ -44,7 +44,7 @@ chown $SUDO_USER:$SUDO_USER /var/www/ghost
 chmod 775 /var/www/ghost
 
 # Move to directory and install Ghost
-su - $SUDO_USER -c "cd /var/www/ghost && ghost install"
+cd /var/www/ghost && ghost install
 
 
 echo "Ghost installation completed!"
