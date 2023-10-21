@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Assuming you've set up a GitHub SCM in Jenkins
+                // For SCM 
                 checkout scm
             }
         }
